@@ -150,6 +150,58 @@ public class QuickMergeSort
 
     public static void mergeSort(int[] input)
     {
-        // Lukas-TODO: implement mergeSort
+        int[] from = input;
+        int[] to = new int[input.length];
+        int loops = 0;
+        int partLengths = 1;
+        int leftPointer;
+        int rightPointer;
+        int writePointer;
+        int leftBorder;
+        int rightBorder;
+
+        for (;partLengths < input.length; partLengths *=2, loops++)
+        {
+            writePointer = 0;
+            leftPointer = 0;
+            leftBorder = partLengths-1;
+            rightPointer = partLengths;
+            rightBorder = (2*partLengths)-1;
+            if (rightBorder >= input.length)
+                rightBorder = input.length-1;
+
+            for(;writePointer < input.length;)
+            {
+                for (;leftPointer <= leftBorder && rightPointer <= rightBorder;)
+                {
+                    to[writePointer++] = (from[leftPointer] <= from[rightPointer]) ?
+                        from[leftPointer++] :
+                        from[rightPointer++];
+                }
+
+                for(;leftPointer < input.length && leftPointer <= leftBorder;)
+                    to[writePointer++] = from[leftPointer++];
+
+                for (;rightPointer < input.length && rightPointer <= rightBorder;)
+                    to[writePointer++] = from[rightPointer++];
+
+                for(;leftPointer >= input.length && rightPointer >= input.length && writePointer < input.length;)
+                    to[writePointer] = from[writePointer++];
+
+                leftPointer += partLengths;
+                leftBorder += 2*partLengths;
+                rightPointer += partLengths;
+                rightBorder += 2*partLengths;
+                if (rightBorder >= input.length)
+                    rightBorder = input.length-1;
+            }
+
+            int[] tmp = from;
+            from = to;
+            to = tmp;
+        }
+        if (loops % 2 != 0)
+            System.arraycopy(from, 0, input, 0, input.length);
+
     }
 }
