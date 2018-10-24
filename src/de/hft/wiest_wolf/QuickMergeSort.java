@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -53,7 +54,21 @@ public class QuickMergeSort
 
     public static void main(String[] args)
     {
-        // TODO code application logic here
+        if (args.length == 0)
+        {
+            final int[] TESTSIZE = {100_000, 200_000, 300_000, 400_000, 500_000,
+                600_000, 700_000, 800_000, 900_000, 1_000_000};
+            for (int size: TESTSIZE)
+                benchmark(size);
+        }
+        else
+        {
+            Arrays.stream(args[0].split(","))
+                    .map(s -> Integer.valueOf(s.replace("_", "")))
+                    .collect(Collectors.toList())
+                    .stream()
+                    .forEach(QuickMergeSort::benchmark);
+        }
     }
 
     public static void benchmark(int size)
