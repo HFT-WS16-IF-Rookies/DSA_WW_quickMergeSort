@@ -95,7 +95,7 @@ public class QuickMergeSort
                 runs[i] = System.nanoTime();
                 alg.sort(range);
                 runs[i] = System.nanoTime() - runs[i];
-                System.out.print("run " + i + ":\t\t" + (runs[i] / 1_000_000_000d) + "\tseconds");
+                System.out.print("run " + i + ":\t\t" + (runs[i] / 1_000_000d) + "\tms");
                 if (!Arrays.equals(sorted, range))
                     System.out.print("\terror: wrong sorted!");
                 System.out.println();
@@ -111,7 +111,7 @@ public class QuickMergeSort
                     file.createNewFile();
                 }
                 PrintWriter pw = new PrintWriter(new FileOutputStream(file, true), true);
-                pw.println(size + "\t" + (avg / 1000000000d));
+                pw.println(size + "\t" + (avg / 1_000_000d));
                 pw.close();
 
                 file = new File(resultFile + "_" + alg + "_single.csv");
@@ -121,7 +121,7 @@ public class QuickMergeSort
                 }
                 pw = new PrintWriter(new FileOutputStream(file, true), true);
                 for(long l: runs)
-                    pw.println(size + "\t" + (l / 1_000_000_000d));
+                    pw.println(size + "\t" + (l / 1_000_000d));
                 pw.println();
                 pw.close();
             }
