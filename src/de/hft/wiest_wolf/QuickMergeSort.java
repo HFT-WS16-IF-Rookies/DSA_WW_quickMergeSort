@@ -1,6 +1,12 @@
 package de.hft.wiest_wolf;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -43,9 +49,74 @@ public class QuickMergeSort
         }
     }
 
+    public static Date date = new Date();
+
     public static void main(String[] args)
     {
         // TODO code application logic here
+    }
+
+    public static void benchmark(int size)
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+        String resultFile = "DSA_WW_MicroBench_" + df.format(date);
+        long[] runs;
+        int[] generated = generate(size);
+        int[] sorted = generated.clone();
+        Arrays.sort(sorted);
+        int[] range;
+
+        for (Algo alg: Algo.values())
+        {
+            System.out.println("algorithm:\t" + alg);
+            System.out.println("array-size:\t" + size);
+            System.out.println("needed Time:");
+
+            runs = new long[5];
+            long avg;
+
+            for (int i=0; i < runs.length; i++)
+            {
+                range = generated.clone();
+                runs[i] = System.nanoTime();
+                alg.sort(range);
+                runs[i] = System.nanoTime() - runs[i];
+                System.out.print("run " + i + ":\t\t" + (runs[i] / 1_000_000_000d) + "\tseconds");
+                if (!Arrays.equals(sorted, range))
+                    System.out.print("\terror: wrong sorted!");
+                System.out.println();
+            }
+            System.out.println("\n\n");
+            avg = Arrays.asList(runs).stream().mapToInt(Integer::intValue).sum() / runs.length;
+
+            try
+            {
+                File file = new File(resultFile + "_" + alg + "_avg.csv");
+                if (!file.exists())
+                {
+                    file.createNewFile();
+                }
+                PrintWriter pw = new PrintWriter(new FileOutputStream(file, true), true);
+                pw.println(size + "\t" + (avg / 1000000000d));
+                pw.close();
+
+                file = new File(resultFile + "_" + alg + "_single.csv");
+                if (!file.exists())
+                {
+                    file.createNewFile();
+                }
+                pw = new PrintWriter(new FileOutputStream(file, true), true);
+                for(long l: runs)
+                    pw.println(size + "\t" + (l / 1_000_000_000d));
+                pw.println();
+                pw.close();
+            }
+            catch (IOException e)
+            {
+                System.err.println("Couldn't save runtime for algorithm: " + alg + " for size: " + size);
+                e.printStackTrace();
+            }
+        }
     }
 
     public static int[] generate(int size)
