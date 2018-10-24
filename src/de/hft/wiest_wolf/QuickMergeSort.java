@@ -21,8 +21,8 @@ public class QuickMergeSort
         QUICKSORT("Quicksort",      QuickMergeSort::quickSort),
         MERGESORT("Mergesort",      QuickMergeSort::mergeSort);
 
-        String name;
-        ISort sort;
+        private final String name;
+        private final ISort sort;
 
         Algo(String name, ISort sort)
         {
