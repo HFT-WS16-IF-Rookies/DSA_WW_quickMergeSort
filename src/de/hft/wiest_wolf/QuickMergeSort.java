@@ -145,9 +145,39 @@ public class QuickMergeSort
 
     public static void quickSort(int[] input)
     {
-        // Erik-TODO: implement quickSort
+        quickSort(input, 0, input.length-1);
     }
-
+    
+    public static void quickSort(int[] input, int low, int high)
+    {
+        if(low < high)
+        {
+            int pi = partition(input, low, high);
+            quickSort(input, low, pi - 1);
+            quickSort(input, pi + 1, high);
+        }
+    }
+    
+    public static int partition (int[] input, int low, int high)
+    {
+        int pivot = input[high];
+        int i = (low-1);
+        for (int j=low; j<high; j++)
+        {
+            if (input[j] <= pivot) 
+            {
+                i++;
+                int temp = input[i];
+                input[i] = input[j];
+                input[j] = temp;
+            }
+        }
+        int temp = input[i+1]; 
+        input[i+1] = input[high]; 
+        input[high] = temp;
+        return i+1;
+    }
+    
     public static void mergeSort(int[] input)
     {
         int[] from = input;
