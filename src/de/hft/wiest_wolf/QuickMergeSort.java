@@ -87,7 +87,7 @@ public class QuickMergeSort
                 System.out.println();
             }
             System.out.println("\n\n");
-            avg = Arrays.asList(runs).stream().mapToInt(Integer::intValue).sum() / runs.length;
+            avg = Arrays.stream(runs).map(Long::valueOf).sum() / runs.length;
 
             try
             {
